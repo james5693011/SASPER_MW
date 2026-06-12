@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASPER_MW | CO-CREGEL Music Official BLOG</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Global Reset & Theme */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0d1117; 
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        header {
+            background-color: #161b22; 
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid #ff6600; 
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+        
+        .logo span { color: #ff6600; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #f0f6fc; 
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: #0088cc; }
+
+        /* Main Layout */
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        section { margin-bottom: 4rem; }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #21262d;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Dynamic Blog Container Feed */
+        #blogContainer { display: flex; flex-direction: column; }
+
+        .blog-card {
+            background-color: #161b22;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #0088cc; 
+            border-top: 1px solid #30363d;
+            border-right: 1px solid #30363d;
+            border-bottom: 1px solid #30363d;
+            transition: transform 0.2s, border-left-color 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-2px);
+            border-left-color: #ff6600; 
+        }
+
+        /* Video Container Inside Blog Cards */
+        .music-player-container {
+            background: #0d1117;
+            padding: 0;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            aspect-ratio: 16 / 9; 
+            margin-top: 1rem;
+        }
+
+        .music-player-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
+        }
+
+        .blog-card img {
+            max-width: 100%;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-top: 1rem;
+            border: 1px solid #30363d;
+            display: block;
+        }
+
+        .post-date {
+            font-size: 0.85rem;
+            color: #8b949e;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .blog-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Newsletter */
+        .newsletter-box {
+            background: linear-gradient(135deg, #161b22, #0d1117);
+            padding: 2.5rem 2rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #30363d;
+        }
+
+        .newsletter-box input[type="email"] {
+            padding: 0.75rem 1rem;
+            width: 60%;
+            max-width: 300px;
+            border: 1px solid #30363d;
+            background-color: #0d1117;
+            color: #fff;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+            outline: none;
+        }
+
+        .newsletter-box button {
+            padding: 0.75rem 1.5rem;
+            background-color: #ff6600; 
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* SECRET ADMIN MODAL */
+        .admin-modal {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .admin-content {
+            background-color: #161b22;
+            border: 2px solid #ff6600;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .admin-content h3 {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 0.5rem;
+            color: #ff6600;
+        }
+
+        .admin-form-group { margin-bottom: 1rem; }
+        .admin-form-group label { display: block; margin-bottom: 0.3rem; font-size: 0.9rem; color: #c9d1d9; }
+        .admin-form-group input, .admin-form-group textarea {
+            width: 100%; padding: 0.6rem; background-color: #0d1117;
+            border: 1px solid #30363d; color: white; border-radius: 4px; outline: none;
+        }
+
+        .admin-buttons { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem; }
+        .btn-save { background-color: #0088cc; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-cancel { background-color: #30363d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; }
+
+        /* POST MANAGER */
+        .manage-posts-section {
+            margin-top: 2rem;
+            border-top: 2px dashed #30363d;
+            padding-top: 1.5rem;
+        }
+
+        .manage-posts-section h4 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .admin-post-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0d1117;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #30363d;
+        }
+
+        .admin-post-item span {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70%;
+        }
+
+        .btn-delete {
+            background-color: #da3637; 
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .btn-delete:hover { background-color: #b82324; }
+
+        /* Footer */
+        footer {
+            background-color: #161b22;
+            border-top: 1px solid #30363d;
+            padding: 2.5rem 1rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .footer-container {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+        }
+
+        .social-icons { display: flex; gap: 2rem; list-style: none; }
+        .social-icons a { color: #c9d1d9; font-size: 1.75rem; transition: color 0.2s, transform 0.2s; display: inline-block; }
+        .social-icons a:hover { transform: scale(1.15); }
+        .social-icons a.fb-icon:hover { color: #1877f2; }
+        .social-icons a.yt-icon:hover { color: #ff0000; }
+        .social-icons a.email-icon:hover { color: #ff6600; } 
+
+        .copyright { font-size: 0.85rem; color: #8b949e; }
+        #secretAdminTrigger { cursor: pointer; color: #8b949e; user-select: none; }
+        #secretAdminTrigger:hover { color: #ff6600; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">SASPER <span>MW</span></div>
+            <ul class="nav-links">
+                <li><a href="#blog">Updates & Music</a></li>
+                <li><a href="#subscribe">Join Newsletter</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="blog">
+            <h2>Updates From CO_CREGEL MUSIC</h2>
+            <div id="blogContainer"></div>
+        </section>
+
+        <section id="subscribe">
+            <div class="newsletter-box">
+                <h3>Join the Inner Circle</h3>
+                <p style="color: #8b949e; margin-bottom: 1.5rem;">Get exclusive music leaks and show discounts straight to your inbox.</p>
+                <form id="newsletterForm">
+                    <input type="email" id="userEmail" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-content">
+            <h3>CO-CREGEL Control Dashboard</h3>
+            
+            <form id="adminPostForm">
+                <div class="admin-form-group">
+                    <label for="postTitle">Update Title / Track Name</label>
+                    <input type="text" id="postTitle" placeholder="e.g., Official Video Out Now!" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="postVideo">YouTube Link OR Embed Code (Optional)</label>
+                    <input type="text" id="postVideo" placeholder="https://youtu.be/... or full <iframe> code">
+                </div>
+                <div class="admin-form-group">
+                    <label for="postImage">Image Link / Direct URL (Optional)</label>
+                    <input type="url" id="postImage" placeholder="https://example.com/artwork.jpg">
+                </div>
+                <div class="admin-form-group">
+                    <label for="postDesc">Brief Description / Content</label>
+                    <textarea id="postDesc" rows="3" placeholder="Write context or details here..." required></textarea>
+                </div>
+                <div class="admin-buttons">
+                    <button type="button" class="btn-cancel" id="closeAdminBtn">Close Panel</button>
+                    <button type="submit" class="btn-save">Publish Update</button>
+                </div>
+            </form>
+
+            <div class="manage-posts-section">
+                <h4>Manage Active Posts</h4>
+                <div id="adminManageList"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <ul class="social-icons">
+                <li><a href="#" class="fb-icon" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook"></i></a></li>
+                <li><a href="#" class="yt-icon" target="_blank" rel="noopener" title="YouTube"><i class="fab fa-youtube"></i></a></li>
+                <li><a href="mailto:friend@example.com" class="email-icon" title="Email Us"><i class="fas fa-envelope"></i></a></li>
+            </ul>
+            <p class="copyright">&copy; <span id="secretAdminTrigger">2026</span> SASPER_MW & CO-CREGEL Music. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const defaultPosts = [
+            {
+                date: "June 12, 2026",
+                title: "Laying Down Vocals for Track 4",
+                desc: "Spotted in the studio tonight working on the mid-album ballad. The harmonies are sounding massive. Can't wait for you all to hear it.",
+                img: "",
+                video: "https://www.youtube.com/embed/jVSzt5m1WtA?si=EfoqGbx0zRHYza1B"
+            },
+            {
+                date: "May 28, 2026",
+                title: "Summer Tour Announced!",
+                desc: "We are hitting the road this July. Check out the tour dates page next week to see if we're hitting your city. Tickets go on sale Friday.",
+                img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80",
+                video: ""
+            }
+        ];
+
+        function cleanYoutubeUrl(input) {
+            if (!input || input.trim() === "") return "";
+            if (input.includes("<iframe")) {
+                const match = input.match(/src=["']([^"']+)["']/);
+                return match ? match[1] : "";
+            }
+            let videoId = "";
+            if (input.includes("youtu.be/")) {
+                videoId = input.split("youtu.be/")[1].split(/[?#]/)[0];
+            } else if (input.includes("v=")) {
+                videoId = input.split("v=")[1].split(/[&#]/)[0];
+            } else if (input.includes("embed/")) {
+                return input;
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : input;
+        }
+
+        function refreshBlogData() {
+            const blogContainer = document.getElementById('blogContainer');
+            const adminManageList = document.getElementById('adminManageList');
+            
+            blogContainer.innerHTML = ''; 
+            adminManageList.innerHTML = '';
+
+            let savedPosts = JSON.parse(localStorage.getItem('coCregelPosts'));
+            if (!savedPosts) {
+                savedPosts = defaultPosts;
+                localStorage.setItem('coCregelPosts', JSON.stringify(savedPosts));
+            }
+
+            savedPosts.forEach((post, index) => {
+                const card = document.createElement('article');
+                card.className = 'blog-card';
+                
+                let imgHTML = (post.img && post.img.trim() !== '') ? 
+                    `<img src="${post.img}" onerror="this.style.display='none';" alt="${post.title}">` : '';
+                
+                let videoHTML = (post.video && post.video.trim() !== '') ? 
+                    `<div class="music-player-container"><iframe src="${cleanYoutubeUrl(post.video)}" allowfullscreen></iframe></div>` : '';
+                
+                card.innerHTML = `
+                    <span class="post-date">${post.date}</span>
+                    <h3>${post.title}</h3>
+                    <p>${post.desc}</p>
+                    ${videoHTML}
+                    ${imgHTML}
+                `;
+                blogContainer.appendChild(card);
+
+                const listItem = document.createElement('div');
+                listItem.className = 'admin-post-item';
+                listItem.innerHTML = `
+                    <span><strong>${post.title}</strong> (${post.date})</span>
+                    <button class="btn-delete" onclick="deletePost(${index})">Delete</button>
+                `;
+                adminManageList.appendChild(listItem);
+            });
+        }
+
+        window.deletePost = function(index) {
+            let currentPosts = JSON.parse(localStorage.getItem('coCregelPosts')) || defaultPosts;
+            if(confirm(`Completely remove "${currentPosts[index].title}"?`)) {
+                currentPosts.splice(index, 1);
+                localStorage.setItem('coCregelPosts', JSON.stringify(currentPosts));
+                refreshBlogData();
+            }
+        }
+
+        // PASSWORD-PROTECTED VISIBILITY LOGIC
+        const trigger = document.getElementById('secretAdminTrigger');
+        const modal = document.getElementById('adminModal');
+        const closeBtn = document.getElementById('closeAdminBtn');
+
+        trigger.addEventListener('click', () => {
+            // Prompts user for access validation
+            const userPassword = prompt("Enter Administration Password to access CO-CREGEL Control Dashboard:");
+            
+            if (userPassword === "saspermwco") {
+                modal.style.display = 'flex';
+            } else if (userPassword !== null) {
+                alert("Access Denied: Incorrect Password Entered.");
+            }
+        });
+
+        closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+
+        document.getElementById('adminPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('postTitle').value;
+            const video = document.getElementById('postVideo').value;
+            const img = document.getElementById('postImage').value;
+            const desc = document.getElementById('postDesc').value;
+            
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString('en-US', options);
+
+            const newPost = { date: today, title, desc, img, video };
+
+            let currentPosts = JSON.parse(localStorage.getItem('coCregelPosts')) || defaultPosts;
+            currentPosts.unshift(newPost); 
+            
+            localStorage.setItem('coCregelPosts', JSON.stringify(currentPosts));
+
+            refreshBlogData();
+            document.getElementById('adminPostForm').reset();
+            modal.style.display = 'none';
+        });
+
+        document.getElementById('newsletterForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const emailInput = document.getElementById('userEmail').value;
+            alert(`Thanks for subscribing with: ${emailInput}.`);
+            document.getElementById('userEmail').value = '';
+        });
+
+        refreshBlogData();
+    </script>
+</body>
+</html>
